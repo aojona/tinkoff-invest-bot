@@ -1,0 +1,9 @@
+telegram:
+  bot:
+    name: ${BOT_NAME:@aojona_test_bot}
+    webHookPath: ${WEB_HOOK_PATH:https://dd36-2a00-1fa1-42f0-f85f-7542-8bec-fccb-2274.ngrok-free.app}
+    token: ${BOT_TOKEN:6134436197:AAF81QbNjimrTtRx9CGh5DzT0IBMyLmDNLE}
+
+tinkoff:
+  token: ${TINKOFF_TOKEN:t.JGvYy-8vTGsPZIztwJTni8iThB5GbuaCSAKRWj9e3fb85sKtzrMedO4OP1tU145DLU0P5T4Z651vNLj9B5z_cQ}
+  sandbox: ${SANDBOX:true}
