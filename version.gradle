@@ -1,6 +1,7 @@
 ext {
     versions = [
-            'api'    : '1.5',
-            'bot'  : '6.7.0'
+            'api'       : '1.5',
+            'bot'       : '6.7.0',
+            'streamex'  : '0.8.1'
     ]
 }

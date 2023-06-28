@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.kirill.tinkoff.invest.config.properties.TinkoffProperties;
 import ru.tinkoff.piapi.core.InstrumentsService;
 import ru.tinkoff.piapi.core.InvestApi;
+import ru.tinkoff.piapi.core.MarketDataService;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,5 +27,10 @@ public class TinkoffConfig {
     @Bean
     public InstrumentsService instrumentsService(InvestApi investApi) {
         return investApi.getInstrumentsService();
+    }
+
+    @Bean
+    public MarketDataService operationsService(InvestApi investApi) {
+        return investApi.getMarketDataService();
     }
 }
