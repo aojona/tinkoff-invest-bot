@@ -19,10 +19,9 @@ public class TelegramBot extends TelegramWebhookBot {
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-
         if (update.hasCallbackQuery()) {
-            return updateHandler.handleCallbackQuerry(update.getCallbackQuery());
+            return updateHandler.handleCallbackQuery(update.getCallbackQuery());
         }
-        return null;
+        return updateHandler.handleMessage(update.getMessage());
     }
 }

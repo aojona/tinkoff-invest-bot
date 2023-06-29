@@ -30,22 +30,23 @@ public enum Nominal {
     ZAR("Южноафриканский рэнд", "BBG0013HLF18"),
     JPY("Японская иена",        "BBG0013HQ524");
 
-    private static final Map<String, Nominal> nominalMap;
+    private static final Map<String, Nominal> NOMINAL_MAP;
 
     static {
-        nominalMap = Arrays
+        NOMINAL_MAP = Arrays
                 .stream(Nominal.values())
                 .collect(Collectors.toMap(Nominal::getFigi, Function.identity()));
     }
 
     private final String name;
     private final String figi;
+
     Nominal(String name, String figi) {
         this.name = name;
         this.figi = figi;
     }
 
     public static Nominal getByFigi(String figi) {
-        return nominalMap.get(figi);
+        return NOMINAL_MAP.get(figi);
     }
 }
