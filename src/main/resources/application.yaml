@@ -1,8 +1,8 @@
 telegram:
   bot:
-    name: ${BOT_NAME:@my_tinkoff_bot}
-    webHookPath: ${WEB_HOOK_PATH:https://0431-213-138-86-134.ngrok-free.app}
-    token: ${BOT_TOKEN:6281502712:AAHy-W4LIrZDhH-Y80u_WiK3UwA0-E9tPnU}
+    name: ${BOT_NAME:@tinkoff_mybot}
+    webHookPath: ${WEB_HOOK_PATH:https://ea20-213-138-86-134.ngrok-free.app}
+    token: ${BOT_TOKEN:6390450272:AAEqeBjCMJ0NTzPePhM7h99etWowODd8Vqg}
 
 tinkoff:
   token: ${TINKOFF_TOKEN:t.JGvYy-8vTGsPZIztwJTni8iThB5GbuaCSAKRWj9e3fb85sKtzrMedO4OP1tU145DLU0P5T4Z651vNLj9B5z_cQ}

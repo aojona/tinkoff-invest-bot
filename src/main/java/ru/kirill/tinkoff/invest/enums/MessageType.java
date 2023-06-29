@@ -1,6 +1,7 @@
 package ru.kirill.tinkoff.invest.enums;
 
 import org.springframework.context.MessageSource;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.kirill.tinkoff.invest.util.KeyboardUtil;
@@ -14,7 +15,7 @@ public enum MessageType {
         @Override
         public String getReply(MessageSource messageSource, Message message) {
             Object[] arguments = {message.getChat().getFirstName(), message.getChat().getLastName()};
-            return messageSource.getMessage(message.getText(), arguments, Locale.getDefault());
+            return messageSource.getMessage(message.getText(), arguments, Locale.US);
         }
 
         @Override
@@ -28,7 +29,18 @@ public enum MessageType {
             return KeyboardUtil.getNominalKeyboard();
         }
     },
-    GOODBYE();
+    GOODBYE(),
+    SUBSCRIBE() {
+        @Override
+        public String getMessage(MessageSource messageSource, CallbackQuery callbackQuery) {
+            String[] queries = callbackQuery.getData().split("\\.");
+            Object[] arguments = {
+                    callbackQuery.getMessage().getChat().getFirstName(),
+                    CurrencyType.getByFigi(queries[1]).getName()
+            };
+            return messageSource.getMessage("/" + queries[0], arguments, Locale.US);
+        }
+    };
 
     private static final Map<String, MessageType> MESSAGE_TYPES;
     static {
@@ -41,7 +53,7 @@ public enum MessageType {
     }
 
     public String getReply(MessageSource messageSource, Message message) {
-        return messageSource.getMessage(message.getText(), null, Locale.getDefault());
+        return messageSource.getMessage(message.getText(), null, Locale.US);
     }
 
     public InlineKeyboardMarkup getKeyboardMarkup() {
@@ -49,6 +61,12 @@ public enum MessageType {
     }
 
     public static Optional<MessageType> getMessageType(String name) {
-        return Optional.ofNullable(MESSAGE_TYPES.get(name.toUpperCase()));
+        return name.contains(".")
+                ? Optional.ofNullable(MESSAGE_TYPES.get(name.toUpperCase().split("\\.")[0]))
+                : Optional.ofNullable(MESSAGE_TYPES.get(name.toUpperCase()));
+    }
+
+    public String getMessage(MessageSource messageSource, CallbackQuery callbackQuery) {
+        return messageSource.getMessage("/" + callbackQuery.getData(), null, Locale.US);
     }
 }
