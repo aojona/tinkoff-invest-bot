@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum MessageType {
-    START() {
+    START {
         @Override
         public String getReply(MessageSource messageSource, Message message) {
             Object[] arguments = {message.getChat().getFirstName(), message.getChat().getLastName()};
@@ -23,14 +23,14 @@ public enum MessageType {
             return KeyboardUtil.getStartKeyboard();
         }
     },
-    CURRENCY() {
+    CURRENCY {
         @Override
         public InlineKeyboardMarkup getKeyboardMarkup() {
             return KeyboardUtil.getNominalKeyboard();
         }
     },
-    GOODBYE(),
-    SUBSCRIBE() {
+    GOODBYE,
+    SUBSCRIBE {
         @Override
         public String getMessage(MessageSource messageSource, CallbackQuery callbackQuery) {
             String[] queries = callbackQuery.getData().split("\\.");
