@@ -21,10 +21,12 @@ repositories {
 dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "org.telegram:telegrambots:${versions.bot}"
     implementation "ru.tinkoff.piapi:java-sdk-core:${versions.api}"
     implementation "one.util:streamex:${versions.streamex}"
+
+    runtimeOnly 'org.postgresql:postgresql'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 

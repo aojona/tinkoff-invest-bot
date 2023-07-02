@@ -1,9 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
 telegram:
   bot:
     name: ${BOT_NAME:@tinkoff_mybot}
-    webHookPath: ${WEB_HOOK_PATH:https://ea20-213-138-86-134.ngrok-free.app}
+    webHookPath: ${WEB_HOOK_PATH:https://caa6-213-138-86-134.ngrok-free.app}
     token: ${BOT_TOKEN:6390450272:AAEqeBjCMJ0NTzPePhM7h99etWowODd8Vqg}
 
 tinkoff:
   token: ${TINKOFF_TOKEN:t.JGvYy-8vTGsPZIztwJTni8iThB5GbuaCSAKRWj9e3fb85sKtzrMedO4OP1tU145DLU0P5T4Z651vNLj9B5z_cQ}
   sandbox: ${SANDBOX:true}
+
+schedule:
+  fixed-rate:
+    update-currencies: 5_000
+    send-prices: 3_600_000

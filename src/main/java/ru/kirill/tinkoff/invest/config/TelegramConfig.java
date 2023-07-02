@@ -3,14 +3,12 @@ package ru.kirill.tinkoff.invest.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import ru.kirill.tinkoff.invest.bot.TelegramBot;
 import ru.kirill.tinkoff.invest.bot.UpdateHandler;
 import ru.kirill.tinkoff.invest.config.properties.TelegramProperties;
 
 @Configuration
-@EnableScheduling
 @RequiredArgsConstructor
 public class TelegramConfig {
 

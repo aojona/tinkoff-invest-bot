@@ -4,8 +4,7 @@ import lombok.experimental.UtilityClass;
 import one.util.streamex.StreamEx;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.kirill.tinkoff.invest.enums.CurrencyType;
-
+import ru.kirill.tinkoff.invest.entity.Currency;
 import java.util.*;
 
 @UtilityClass
@@ -18,22 +17,22 @@ public class KeyboardUtil {
                 .build();
     }
 
-    public static InlineKeyboardMarkup getNominalKeyboard() {
+    public static InlineKeyboardMarkup getCurrencyKeyboard(List<Currency> currencies) {
         return InlineKeyboardMarkup
                 .builder()
-                .keyboard(getNominalButtons())
+                .keyboard(getCurrencyButtons(currencies))
                 .build();
     }
 
     public static InlineKeyboardMarkup getSubscribeMarkup(String figi) {
-        String key = "subscribe." + figi;
+        String callback = "subscribe." + figi;
         String message = ResourceBundle
                 .getBundle("messages", Locale.US)
-                .getString(key.split("\\.")[0]);
+                .getString(callback.split("\\.")[0]);
         return InlineKeyboardMarkup
                 .builder()
                 .keyboard(Optional
-                        .of(createButton(message, key))
+                        .of(createButton(message, callback))
                         .map(List::of)
                         .map(Collections::singleton)
                         .get()
@@ -41,33 +40,35 @@ public class KeyboardUtil {
                 .build();
     }
 
-    private static List<List<InlineKeyboardButton>> getNominalButtons() {
+    private static List<List<InlineKeyboardButton>> getCurrencyButtons(List<Currency> currencies) {
         return StreamEx
-                .ofSubLists(getOneDimensionalNominalButtons(), 2)
+                .ofSubLists(getOneDimensionalCurrencyButtons(currencies), 2)
                 .toList();
     }
 
-    private static List<InlineKeyboardButton> getOneDimensionalNominalButtons() {
-        return Arrays
-                .stream(CurrencyType.values())
-                .map(nominal -> createButton(nominal.getName(), nominal.getFigi()))
+    private static List<InlineKeyboardButton> getOneDimensionalCurrencyButtons(List<Currency> currencies) {
+        return currencies
+                .stream()
+                .map(currency -> createButton(currency.getName(), "currency." + currency.getFigi()))
                 .toList();
     }
 
     private static List<List<InlineKeyboardButton>> getStartButtons() {
-        ResourceBundle bundle = ResourceBundle.getBundle("start", Locale.US);
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.US);
         return List.of(bundle
                 .keySet()
                 .stream()
+                .filter(key -> key.startsWith("start") && !key.endsWith("reply"))
+                .sorted(Comparator.reverseOrder())
                 .map(key -> createButton(bundle.getString(key), key))
                 .toList());
     }
 
-    private static InlineKeyboardButton createButton(String text, String callbackData) {
+    private static InlineKeyboardButton createButton(String text, String callback) {
         return InlineKeyboardButton
                 .builder()
                 .text(text)
-                .callbackData(callbackData)
+                .callbackData(callback)
                 .build();
     }
 }
