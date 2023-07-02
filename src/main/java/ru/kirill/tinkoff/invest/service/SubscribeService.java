@@ -12,6 +12,7 @@ import ru.kirill.tinkoff.invest.bot.TelegramBot;
 import ru.kirill.tinkoff.invest.entity.Currency;
 import ru.kirill.tinkoff.invest.entity.Subscriber;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,6 +21,7 @@ import java.util.Locale;
 public class SubscribeService {
 
     private static final String CURRENCY_REPLY = "currency.reply";
+    private static final String SUBSCRIPTIONS_REPLY = "subscriptions.reply";
 
     private final DataService dataService;
     private final MessageSource messageSource;
@@ -41,21 +43,26 @@ public class SubscribeService {
                 .forEach(this::sendPricesToSubscriber);
     }
 
-    private void sendPricesToSubscriber(Subscriber subscriber) {
-    subscriber
-            .getCurrencies()
-            .forEach(currency -> {
-                log.info("sub: {}, currency: {}", subscriber.getUsername(), currency.getName());
-                sendPriceToSubscriber(subscriber, currency);
-            });
-    }
-
     @SneakyThrows
-    private void sendPriceToSubscriber(Subscriber subscriber, Currency currency)  {
-        Object[] arguments = {currency.getName(), currency.getPrice()};
-        String message = messageSource.getMessage(CURRENCY_REPLY, arguments, Locale.US);
+    private void sendPricesToSubscriber(Subscriber subscriber) {
+        String message = messageSource.getMessage(SUBSCRIPTIONS_REPLY, null, Locale.US) +
+                createMessageWithCurrencies(subscriber);
         SendMessage reply = createReply(subscriber.getChatId(), message);
         bot.execute(reply);
+    }
+
+    private String createMessageWithCurrencies(Subscriber subscriber) {
+        return subscriber
+                .getCurrencies()
+                .stream()
+                .map(this::createMessageWithCurrency)
+                .collect(Collectors.joining("\n"));
+    }
+
+
+    private String createMessageWithCurrency(Currency currency)  {
+        Object[] arguments = {currency.getName(), currency.getPrice()};
+        return messageSource.getMessage(CURRENCY_REPLY, arguments, Locale.US);
     }
 
     private SendMessage createReply(long chatId, String text) {

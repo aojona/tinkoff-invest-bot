@@ -11,6 +11,8 @@ import ru.kirill.tinkoff.invest.entity.Currency;
 import ru.kirill.tinkoff.invest.entity.Subscriber;
 import ru.kirill.tinkoff.invest.repository.CurrencyRepository;
 import ru.kirill.tinkoff.invest.repository.SubscriberRepository;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,12 @@ public class DataService {
     @Transactional
     public void initDatabase() {
         if (currencyRepository.findAll().isEmpty()) {
-            currencyRepository.saveAll(tinkoffClient.getCurrencies());
+            List<Currency> currencies = tinkoffClient
+                    .getCurrencies()
+                    .stream()
+                    .sorted(Comparator.comparing(Currency::getName))
+                    .toList();
+            currencyRepository.saveAll(currencies);
         }
     }
 
@@ -71,6 +78,6 @@ public class DataService {
     }
 
     public List<Subscriber> getSubscribers() {
-        return subscriberRepository.findAll();
+        return subscriberRepository.findByCurrenciesNotEmpty();
     }
 }

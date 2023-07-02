@@ -18,4 +18,7 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
     @NonNull
     @EntityGraph(attributePaths = "currencies")
     List<Subscriber> findAll();
+
+    @EntityGraph(attributePaths = "currencies")
+    List<Subscriber> findByCurrenciesNotEmpty();
 }
